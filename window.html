@@ -1,0 +1,32 @@
+<style>
+    html {
+        height: 100%;
+    }
+
+    #window_id {
+        position: absolute;
+        -webkit-user-select: none;
+        border: 1px solid #000;
+        font-size: 12px;
+        left: 0%;
+        top: 0%;
+        min-width:200pt;
+        min-height:200pt;
+    }
+
+    #window_id main {
+        overflow: auto;
+        max-height: 50vh;
+    }
+
+    #window_id .border {
+        border: 1px dotted #000;
+        line-height: 24px;
+        cursor: move;
+    }
+</style>
+
+<div class="window" id="window_id">
+    <div class="border">border</div>
+    <main>main</main>
+</div>
