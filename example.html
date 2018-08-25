@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>window engine</title>
+    <style>
+        html {
+            height: 100%;
+            background: linear-gradient(#226e6b, #361175);
+        }
+
+        body {
+            font-family: Open Sans, sans-serif;
+            font-size: 12pt;
+            font-weight: 100;
+        }
+
+        #win1 {
+            color: #443818;
+            box-shadow: 0 5pt 10pt #0003;
+            background: #bfb184;
+            min-height: 200pt;
+            position: absolute;
+            font-family: Gulim, monospace;
+            -webkit-user-select: none;
+            z-index: 0;
+            border: 2px outset #bfb184;
+            font-size: 12px;
+            word-wrap: break-word;
+            left: 50%;
+            top: 10%;
+        }
+
+        #win1 main {
+            overflow: auto;
+            max-height: 50vh;
+        }
+
+        #win1 .border {
+            background: linear-gradient(90deg, #998645, #bfb184);
+            margin: 2px;
+            text-align: left;
+            padding-left: 10px;
+            font-size: 12px;
+            line-height: 24px;
+        }
+
+        #win2 {
+            box-shadow: 0 5pt 10pt #0003;
+            background: #fff;
+            color: #333;
+            border-radius: 10pt;
+            width: 250pt;
+            position: absolute;
+            text-align: right;
+            -webkit-user-select: none;
+            z-index: 0;
+            top: 25%;
+            left: 10%;
+        }
+
+        #win2 .border {
+            background: #dc4c3f;
+        }
+
+        #win2 main {
+            overflow: auto;
+            max-height: 50vh;
+            min-height: 200pt;
+        }
+
+        #win3 {
+            box-shadow: 0 5pt 10pt #0003;
+            background: #fff;
+            border-radius: 10pt;
+            width: 200pt;
+            position: absolute;
+            z-index: 0;
+            left: 40%;
+            top: 50%;
+        }
+
+        input[type="email"] {
+            border: 0;
+            border-bottom: 1px solid #bbb;
+            padding: 5px;
+            width: 257px;
+            background: none;
+        }
+
+        textarea {
+            width: 257px;
+            height: 150pt;
+            border: 0;
+            border-bottom: 1px solid #bbb;
+            padding: 5px;
+            resize: none;
+            background: none;
+        }
+
+        .border {
+            background: #000;
+            color: #fff9;
+            text-align: center;
+            line-height: 27px;
+            font-size: 14px;
+            -webkit-user-select: none;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+<div class="window" id="win1">
+    <div class="border">Retro-style window</div>
+    <main id="liste_annuaire">Z-indexes are attributed to each window, so they can be properly reordered.</main>
+</div>
+<div class="window" id="win2">
+    <div class="border">Duplicate just for testing</div>
+    <main id="liste_reception">Did You Know? - Drag & drop on borders to move a window</main>
+</div>
+<div class="window" id="win2">
+    <div class="border">Delicious Flat Design</div>
+    <main id="liste_reception">Try stacking and switching windows by clicking on them</main>
+</div>
+<div class="window" id="win3">
+    <div class="border">Useless window</div>
+    <input id="adresse_cible" type="email" placeholder="whatever input">
+    <textarea id="texte_cible" placeholder="Textarea or something"></textarea>
+    <input type="submit">
+</div>
+<script>
+    var cible;
+    var offsetX, offsetY;
+
+    Windows = document.getElementsByClassName('window');
+    for (var i = 0; i < Windows.length; i++) {
+        Windows[i].addEventListener('mousedown', function (e) {
+            for (var i = 0; i < Windows.length; i++) {
+                if (e.currentTarget.style.zIndex != Windows.length) {
+                    Windows[i].style.zIndex--;
+                    Windows[i].style.removeProperty("box-shadow");
+                }
+            }
+            e.currentTarget.style.zIndex = Windows.length;
+            e.currentTarget.style.boxShadow = "0 5pt 20pt #1016";
+        });
+
+        document.getElementsByClassName('border')[i].addEventListener('mousedown', function (e) {
+            offsetX = e.pageX - e.currentTarget.parentNode.offsetLeft;
+            offsetY = e.pageY - e.currentTarget.parentNode.offsetTop;
+            cible = e.currentTarget.parentNode;
+            document.body.insertAdjacentHTML('beforeend', '<div id="secureDrag" style="z-index:999;position:absolute;top:0;bottom:0;left:0;right:0;background:none;cursor:move;-webkit-user-select:none;"></div>');
+        });
+    }
+
+    document.body.addEventListener('mousemove', function (e) {
+        if (cible) {
+            cible.style.left = e.pageX - offsetX + 'px';
+            cible.style.top = e.pageY - offsetY + 'px';
+        }
+    });
+    document.body.addEventListener('mouseup', function () {
+        cible = null;
+        if (document.getElementById('secureDrag') !== null) {
+            document.getElementById('secureDrag').outerHTML = null;
+        }
+    });
+</script>
+</body>
+</html>
